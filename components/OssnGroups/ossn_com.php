@@ -411,6 +411,7 @@ function ossn_notificaiton_groups_comments_hook($hook, $type, $return, $params) 
 
 // #186 group join request hook
 function ossn_group_joinrequest_notification($name, $type, $return, $params) {
+	error_log("ossn_group_joinrequest_notification");
 		$baseurl        = ossn_site_url();
 		$user           = ossn_user_by_guid($params->poster_guid);
 		$user->fullname = "<strong>{$user->fullname}</strong>";

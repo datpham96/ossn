@@ -129,7 +129,7 @@ function ossn_wall_comment_menu($callback, $type, $params) {
  * @access private
  */
 function ossn_post_comments($hook, $type, $return, $params) {
-		return ossn_plugin_view('comments/post/comments', $params);
+	return ossn_plugin_view('comments/post/comments', $params);
 }
 
 /**

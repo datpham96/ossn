@@ -125,6 +125,8 @@ function ossn_add_hook($hook, $type, $callback, $priority = 200) {
 	global $Ossn;
 	
 	if (empty($hook) || empty($type)) {
+		error_log("co type");
+		error_log($type);
 		return false;
 	}
 	

@@ -51,7 +51,7 @@
 		}
 		
 		$subject = ossn_print("com:ossn:invite:mail:subject", array($site));
-
+		error_log("moi bang nhap email");
 		return $this->NotifiyUser($email, $subject, $message);
 	}
 	

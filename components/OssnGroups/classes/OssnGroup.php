@@ -318,6 +318,7 @@ class OssnGroup extends OssnObject {
 										0,
 										time()
 								);
+								
 								if($this->OssnDatabase->insert($params)) {
 										return true;
 								}

@@ -46,6 +46,7 @@ function ossn_invite_init() {
  * @access private
  */
 function ossn_invite_pagehandler(){
+    error_log("invite friend");
    if (!ossn_isLoggedin()) {
             ossn_error_page();
    }

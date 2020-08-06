@@ -39,10 +39,10 @@ if ($add->sendRequest(ossn_loggedin_user()->guid, $group)) {
     
     
 	if($usersJoinGroup) {
-		$params['user_info_member_group'] = $usersJoinGroup[0];
+		$params['customer_info'] = $usersJoinGroup[0];
     }
 	if($usersOwnerGroup) {
-		$params['user_info_owner_group'] = $usersOwnerGroup[0];
+		$params['owner_info'] = $usersOwnerGroup[0];
     }
 
     //webhooks

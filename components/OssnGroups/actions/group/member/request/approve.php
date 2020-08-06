@@ -27,10 +27,16 @@ if ($add->approveRequest($user, $group)) {
 	$userClass  = new OssnUser;
 	$usersJoinGroup = $userClass->searchUsers(array(
 		'wheres' => 'u.guid = "'.$user.'"'
-	));
+    ));
+    $usersOwnerGroup = $userClass->searchUsers(array(
+		'wheres' => 'u.guid = "'.$group_owner.'"'
+    ));
     
 	if($usersJoinGroup) {
-		$params['user_info_member_group'] = $usersJoinGroup[0];
+		$params['owner_info'] = $usersJoinGroup[0];
+    }
+    if($usersOwnerGroup) {
+		$params['customer_info'] = $usersOwnerGroup[0];
     }
 
     //webhooks

@@ -18,68 +18,68 @@ if (ossn_is_xhr()) {
     header('Content-Type: application/json');
 }
 if (ossn_add_friend(ossn_loggedin_user()->guid, input('user'))) {
-    // accept friend
-    //user
-	$user  = new OssnUser;
-	$usersSendInvite = $user->searchUsers(array(
-		'wheres' => 'u.guid = "'.ossn_loggedin_user()->guid.'"'
-	));
-	$usersReceiveInvite = $user->searchUsers(array(
-		'wheres' => 'u.guid = "'.input('user').'"'
-    ));
-    
-    $params = [];
-	if($usersSendInvite) {
-		$params['send_invite_email'] = $usersSendInvite[0];
-    }
-	if($usersReceiveInvite) {
-		$params['receive_invite_email'] = $usersReceiveInvite[0];
-    }
-
-    //webhooks
-	$http = new OssnHttp;
-	$http->setHeader([
-		'Content-Type' => 'application/json',
-		'Accept' => 'application/json'
-	]);
-	$http->setBasicAuth(__OSSN_WEBHOOKS_BASIC_USER__, __OSSN_WEBHOOKS_BASIC_PASSWORD__);
-
-	$url = __OSSN_WEBHOOKS_URL_NOTIFICATION__;
-    $http->post($url, ["type" => "inviteFriend","data" => $params]);
-    
     if (!ossn_is_xhr()) {
+        // invite friend
+        //user
+        $user  = new OssnUser;
+        $usersSendInvite = $user->searchUsers(array(
+            'wheres' => 'u.guid = "'.ossn_loggedin_user()->guid.'"'
+        ));
+        $usersReceiveInvite = $user->searchUsers(array(
+            'wheres' => 'u.guid = "'.input('user').'"'
+        ));
+        
+        $params = [];
+        if($usersSendInvite) {
+            $params['customer_info'] = $usersSendInvite[0];
+        }
+        if($usersReceiveInvite) {
+            $params['owner_info'] = $usersReceiveInvite[0];
+        }
+
+        //webhooks
+        $http = new OssnHttp;
+        $http->setHeader([
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
+        ]);
+        $http->setBasicAuth(__OSSN_WEBHOOKS_BASIC_USER__, __OSSN_WEBHOOKS_BASIC_PASSWORD__);
+
+        $url = __OSSN_WEBHOOKS_URL_NOTIFICATION__;
+        $http->post($url, ["type" => "inviteFriend","data" => $params]);
+        
         ossn_trigger_message(ossn_print('ossn:friend:request:submitted'));
         redirect(REF);
     }
     if (ossn_is_xhr()) {
-        // invite friend
-    //user
-	$user  = new OssnUser;
-	$usersSendInvite = $user->searchUsers(array(
-		'wheres' => 'u.guid = "'.ossn_loggedin_user()->guid.'"'
-	));
-	$usersReceiveInvite = $user->searchUsers(array(
-		'wheres' => 'u.guid = "'.input('user').'"'
-    ));
-    
-    $params = [];
-	if($usersSendInvite) {
-		$params['send_invite_email'] = $usersSendInvite[0];
-    }
-	if($usersReceiveInvite) {
-		$params['receive_invite_email'] = $usersReceiveInvite[0];
-    }
+        // accept friend
+        //user
+        $user  = new OssnUser;
+        $usersSendInvite = $user->searchUsers(array(
+            'wheres' => 'u.guid = "'.ossn_loggedin_user()->guid.'"'
+        ));
+        $usersReceiveInvite = $user->searchUsers(array(
+            'wheres' => 'u.guid = "'.input('user').'"'
+        ));
+        
+        $params = [];
+        if($usersSendInvite) {
+            $params['customer_info'] = $usersSendInvite[0];
+        }
+        if($usersReceiveInvite) {
+            $params['owner_info'] = $usersReceiveInvite[0];
+        }
 
-    //webhooks
-	$http = new OssnHttp;
-	$http->setHeader([
-		'Content-Type' => 'application/json',
-		'Accept' => 'application/json'
-	]);
-	$http->setBasicAuth(__OSSN_WEBHOOKS_BASIC_USER__, __OSSN_WEBHOOKS_BASIC_PASSWORD__);
+        //webhooks
+        $http = new OssnHttp;
+        $http->setHeader([
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
+        ]);
+        $http->setBasicAuth(__OSSN_WEBHOOKS_BASIC_USER__, __OSSN_WEBHOOKS_BASIC_PASSWORD__);
 
-	$url = __OSSN_WEBHOOKS_URL_NOTIFICATION__;
-    $http->post($url, ["type" => "inviteFriend","data" => $params]);
+        $url = __OSSN_WEBHOOKS_URL_NOTIFICATION__;
+        $http->post($url, ["type" => "acceptFriend","data" => $params]);
         echo json_encode(array(
                 'type' => 1,
                 'text' => ossn_print('ossn:notification:are:friends'),

@@ -17,6 +17,36 @@ if(trim(ossn_restore_new_lines($message)) == ''){
 }
 $to = input('to');
 if ($message_id = $send->send(ossn_loggedin_user()->guid, $to, $message)) {
+	// send message chat view
+	//user
+	$user  = new OssnUser;
+	$usersSend = $user->searchUsers(array(
+		'wheres' => 'u.guid = "'.ossn_loggedin_user()->guid.'"'
+	));
+	$usersReceive = $user->searchUsers(array(
+		'wheres' => 'u.guid = "'.$to.'"'
+	));
+	
+	$params = [];
+	if($usersSend) {
+		$params['customer_info'] = $usersSend[0];
+	}
+	if($usersReceive) {
+		$params['owner_info'] = $usersReceive[0];
+	}
+
+	//webhooks
+	$http = new OssnHttp;
+	$http->setHeader([
+		'Content-Type' => 'application/json',
+		'Accept' => 'application/json'
+	]);
+	$http->setBasicAuth(__OSSN_WEBHOOKS_BASIC_USER__, __OSSN_WEBHOOKS_BASIC_PASSWORD__);
+
+	$url = __OSSN_WEBHOOKS_URL_NOTIFICATION__;
+	$http->post($url, ["type" => "sendMessage","data" => $params]);
+
+
 	$user = ossn_user_by_guid(ossn_loggedin_user()->guid);
 	$message = ossn_restore_new_lines($message);
 	$params['message_id'] = $message_id;
